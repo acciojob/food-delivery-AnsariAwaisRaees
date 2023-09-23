@@ -5,6 +5,8 @@ import java.util.List;
 import com.driver.model.request.FoodDetailsRequestModel;
 import com.driver.model.response.FoodDetailsResponse;
 import com.driver.model.response.OperationStatusModel;
+import com.driver.service.FoodService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/foods")
 public class FoodController {
+
+	@Autowired
+	FoodService foodService;
 
 	@GetMapping(path="/{id}")
 	public FoodDetailsResponse getFood(@PathVariable String id) throws Exception{
