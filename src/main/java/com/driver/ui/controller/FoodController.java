@@ -9,7 +9,7 @@ import com.driver.model.response.FoodDetailsResponse;
 import com.driver.model.response.OperationStatusModel;
 import com.driver.model.response.RequestOperationName;
 import com.driver.model.response.RequestOperationStatus;
-import com.driver.service.FoodService;
+import com.driver.service.impl.FoodServiceImpl;
 import com.driver.shared.dto.FoodDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class FoodController {
 
 	@Autowired
-	FoodService foodService;
+	FoodServiceImpl foodServiceImpl;
 
 	@GetMapping(path="/{id}")
 	public FoodDetailsResponse getFood(@PathVariable String id) throws Exception{
 
-		FoodDto response = foodService.getFoodById(id);
+		FoodDto response = foodServiceImpl.getFoodById(id);
 
 		FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
 
@@ -52,7 +52,7 @@ public class FoodController {
 		foodDto.setFoodPrice(foodDetails.getFoodPrice());
 		foodDto.setFoodName(foodDetails.getFoodName());
 
-		FoodDto responseDto = foodService.createFood(foodDto);
+		FoodDto responseDto = foodServiceImpl.createFood(foodDto);
 		FoodDetailsResponse response = new FoodDetailsResponse();
 
 		response.setFoodId(responseDto.getFoodId());
@@ -72,8 +72,9 @@ public class FoodController {
 		foodDto.setFoodCategory(foodDetails.getFoodCategory());
 		foodDto.setFoodPrice(foodDetails.getFoodPrice());
 		foodDto.setFoodName(foodDetails.getFoodName());
-		
-		FoodDto response = foodService.updateFoodDetails(id,foodDto);
+
+
+		FoodDto response = foodServiceImpl.updateFoodDetails(id,foodDto);
 
 		FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
 
@@ -89,7 +90,7 @@ public class FoodController {
 	public OperationStatusModel deleteFood(@PathVariable String id) throws Exception{
 
 		try {
-			foodService.deleteFoodItem(id);
+			foodServiceImpl.deleteFoodItem(id);
 			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			operationStatusModel.setOperationName(RequestOperationName.DELETE.name());
 			operationStatusModel.setOperationResult(RequestOperationStatus.SUCCESS.name());
@@ -106,7 +107,7 @@ public class FoodController {
 
 	@GetMapping()
 	public List<FoodDetailsResponse> getFoods() {
-		List<FoodDto> responses = foodService.getFoods();
+		List<FoodDto> responses = foodServiceImpl.getFoods();
 
 		List<FoodDetailsResponse> ans = new ArrayList<>();
 
@@ -120,6 +121,7 @@ public class FoodController {
 
 			ans.add(temp);
 		}
+
 		return ans;
 	}
 }

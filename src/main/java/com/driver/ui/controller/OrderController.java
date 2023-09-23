@@ -9,7 +9,7 @@ import com.driver.model.response.OperationStatusModel;
 import com.driver.model.response.OrderDetailsResponse;
 import com.driver.model.response.RequestOperationName;
 import com.driver.model.response.RequestOperationStatus;
-import com.driver.service.OrderService;
+import com.driver.service.impl.OrderServiceImpl;
 import com.driver.shared.dto.OrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
 	@Autowired
-	OrderService orderService;
+	OrderServiceImpl orderServiceImpl;
 
 	@GetMapping(path="/{id}")
 	public OrderDetailsResponse getOrder(@PathVariable String id) throws Exception{
 
-		OrderDto orderDto = orderService.getOrderById(id);
+		OrderDto orderDto = orderServiceImpl.getOrderById(id);
 
 		OrderDetailsResponse response = new OrderDetailsResponse();
 
@@ -55,7 +55,7 @@ public class OrderController {
 		orderDto.setItems(orderDto.getItems());
 		orderDto.setCost(orderDto.getCost());
 
-		OrderDto savedDto = orderService.createOrder(orderDto);
+		OrderDto savedDto = orderServiceImpl.createOrder(orderDto);
 
 		OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
 
@@ -79,7 +79,7 @@ public class OrderController {
 		orderDto.setItems(order.getItems());
 		orderDto.setCost(order.getCost());
 
-		OrderDto savedDto = orderService.updateOrderDetails(id,orderDto);
+		OrderDto savedDto = orderServiceImpl.updateOrderDetails(id,orderDto);
 
 		OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
 
@@ -96,7 +96,7 @@ public class OrderController {
 	public OperationStatusModel deleteOrder(@PathVariable String id) throws Exception {
 
 		try{
-			orderService.deleteOrder(id);
+			orderServiceImpl.deleteOrder(id);
 			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			operationStatusModel.setOperationName(RequestOperationName.DELETE.name());
 			operationStatusModel.setOperationResult(RequestOperationStatus.SUCCESS.name());
@@ -112,7 +112,7 @@ public class OrderController {
 
 	@GetMapping()
 	public List<OrderDetailsResponse> getOrders() {
-		List<OrderDto> orderDtoList = orderService.getOrders();
+		List<OrderDto> orderDtoList = orderServiceImpl.getOrders();
 
 		List<OrderDetailsResponse> ans = new ArrayList<>();
 

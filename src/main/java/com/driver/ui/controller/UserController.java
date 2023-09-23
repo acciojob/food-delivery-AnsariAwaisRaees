@@ -9,7 +9,7 @@ import com.driver.model.response.OperationStatusModel;
 import com.driver.model.response.RequestOperationName;
 import com.driver.model.response.RequestOperationStatus;
 import com.driver.model.response.UserResponse;
-import com.driver.service.UserService;
+import com.driver.service.impl.UserServiceImpl;
 import com.driver.shared.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
 	@Autowired
-	UserService userService;
+	UserServiceImpl userServiceImpl;
 
 	@GetMapping(path = "/{id}")
 	public UserResponse getUser(@PathVariable String id) throws Exception{
 		UserDto userDto;
 		try{
-			userDto = userService.getUserByUserId(id);
+			userDto = userServiceImpl.getUserByUserId(id);
 
 			UserResponse userResponse = new UserResponse();
 			userResponse.setEmail(userDto.getEmail());
@@ -56,7 +56,7 @@ public class UserController {
 		userDto.setFirstName(userDetails.getFirstName());
 		userDto.setLastName(userDetails.getLastName());
 
-		UserDto savedDto = userService.createUser(userDto);
+		UserDto savedDto = userServiceImpl.createUser(userDto);
 
 		UserResponse response = new UserResponse();
 		response.setUserId(savedDto.getUserId());
@@ -78,7 +78,7 @@ public class UserController {
 		userDto.setFirstName(userDetails.getFirstName());
 		userDto.setLastName(userDetails.getLastName());
 
-		UserDto updatedDto = userService.updateUser(id, userDto);
+		UserDto updatedDto = userServiceImpl.updateUser(id, userDto);
 
 		UserResponse response = new UserResponse();
 
@@ -93,7 +93,7 @@ public class UserController {
 	@DeleteMapping(path = "/{id}")
 	public OperationStatusModel deleteUser(@PathVariable String id) throws Exception{
 		try{
-			userService.deleteUser(id);
+			userServiceImpl.deleteUser(id);
 			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			operationStatusModel.setOperationName(RequestOperationName.DELETE.toString());
 			operationStatusModel.setOperationResult(RequestOperationStatus.SUCCESS.toString());
@@ -111,7 +111,7 @@ public class UserController {
 	@GetMapping()
 	public List<UserResponse> getUsers(){
 
-		List<UserDto> userDtoList = userService.getUsers();
+		List<UserDto> userDtoList = userServiceImpl.getUsers();
 
 		List<UserResponse> ans = new ArrayList<>();
 
@@ -128,5 +128,4 @@ public class UserController {
 		}
 		return ans;
 	}
-
 }
